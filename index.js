@@ -1,5 +1,3 @@
-import player from './img/player.png'
-console.log(player)
 const canvas = document.querySelector('canvas')
 
 const c = canvas.getContext('2d')
@@ -19,8 +17,8 @@ class Player {
             x: 0,
             y: 0
         }
-        this.width = 30
-        this.height = 30
+        this.width = 50
+        this.height = 50
     }
 
     draw(){
@@ -57,11 +55,9 @@ class Platform {
     }
 }
 
-const image = new Image()
-image.src = player
 
 const player = new Player()
-const platforms = [new Platform({x: 200, y: 100}), 
+const platforms = [new Platform({x: 200, y: 300}), 
                    new Platform({x: 500, y: 500})]
 const keys = {
     right: {
@@ -69,8 +65,13 @@ const keys = {
     },
     left: {
         pressed: false
+    },
+    up: {
+        pressed: false
     }
 }
+
+let keyHeld = false
 
 // this will be used to get a win scenario, need to just add a condition to be met to win
 let scrollOffset = 0
@@ -83,6 +84,11 @@ function animate() {
        platform.draw()
     })
 
+    if (keys.up.pressed && !keyHeld) {
+        player.velocity.y = -15
+        keyHeld = true
+
+    }
     if (keys.right.pressed && player.position.x < 400){
         player.velocity.x = 5
     } else if(keys.left.pressed && player.position.x > 100){
@@ -138,7 +144,7 @@ addEventListener('keydown', ( {keyCode} ) => {
         
         case 87:
             console.log('up')
-            player.velocity.y -= 10
+            keys.up.pressed = true
             break
     }
 })
@@ -162,7 +168,8 @@ addEventListener('keyup', ( {keyCode} ) => {
         
         case 87:
             console.log('up')
-            player.velocity.y -= 10
+            keys.up.pressed = false
+            keyHeld = false
             break
     }
 })
