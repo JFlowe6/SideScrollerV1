@@ -1,4 +1,5 @@
-// import player1 from './img/player.png'
+import player from './img/player.png'
+console.log(player)
 const canvas = document.querySelector('canvas')
 
 const c = canvas.getContext('2d')
@@ -56,8 +57,8 @@ class Platform {
     }
 }
 
-// const image = new Image()
-// image.src = player1
+const image = new Image()
+image.src = player
 
 const player = new Player()
 const platforms = [new Platform({x: 200, y: 100}), 
