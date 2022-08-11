@@ -71,7 +71,10 @@ const keys = {
     }
 }
 
+// this is to limit the player to a double jump
 let keyHeld = false
+let onPlatform = false
+let jumpCount = 0
 
 // this will be used to get a win scenario, need to just add a condition to be met to win
 let scrollOffset = 0
@@ -84,11 +87,15 @@ function animate() {
        platform.draw()
     })
 
-    if (keys.up.pressed && !keyHeld) {
+    if (keys.up.pressed && !keyHeld && jumpCount < 2) {
         player.velocity.y = -15
         keyHeld = true
-
+        jumpCount++
+    } else if(jumpCount==2 && player.position.y==584.5 
+        || jumpCount==2 && onPlatform){
+        jumpCount = 0
     }
+
     if (keys.right.pressed && player.position.x < 400){
         player.velocity.x = 5
     } else if(keys.left.pressed && player.position.x > 100){
@@ -118,6 +125,10 @@ platforms.forEach(platform => {
         && player.position.x + player.width >= platform.position.x
         && player.position.x <= platform.position.x + platform.width){
         player.velocity.y = 0
+        onPlatform = true
+        jumpCount = 0
+    } else {
+        onPlatform = false
     }
 
 })
