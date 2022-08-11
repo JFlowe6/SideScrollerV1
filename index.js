@@ -117,6 +117,7 @@ function animate() {
             })
         }
     }
+    
 // Rectangular collision detection
 platforms.forEach(platform => {
        
