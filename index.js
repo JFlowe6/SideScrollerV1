@@ -166,9 +166,9 @@ holes.forEach(hole => {
 
     if (player.position.y + player.height >= hole.position.y 
         && player.position.y + player.height + player.velocity.y >= hole.position.y
-        && player.position.x + player.width >= hole.position.x
-        && player.position.x <= hole.position.x + hole.width){
-        player.velocity.y = 0
+        && player.position.x >= hole.position.x
+        && player.position.x + player.width < hole.position.x + hole.width){
+        player.velocity.y = 5
         onHole = true
     } else {
         onHole = false
