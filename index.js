@@ -22,7 +22,7 @@ class Player {
     }
 
     draw(){
-        c.fillStyle = 'red'
+        c.fillStyle = 'green'
         c.fillRect(this.position.x, this.position.y, this.width, this.height)
     }
 
@@ -46,7 +46,7 @@ class Platform {
             y: y
         }
         this.width = 200
-        this.height = 20
+        this.height = 30
     }
 
     draw() {
@@ -55,10 +55,28 @@ class Platform {
     }
 }
 
+class Hole {
+    constructor({x, y}){
+        this.position = {
+            x: x,
+            y: y
+        }
+        this.width = 300
+        this.height = 5
+    }
+
+    draw() {
+        c.fillStyle = 'red'
+        c.fillRect(this.position.x, this.position.y, this.width, this.height)
+    }
+}
+
 
 const player = new Player()
 const platforms = [new Platform({x: 200, y: 300}), 
                    new Platform({x: 500, y: 500})]
+
+const holes = [new Hole({x: 250, y: 629})]                   
 const keys = {
     right: {
         pressed: false
@@ -74,6 +92,7 @@ const keys = {
 // this is to limit the player to a double jump
 let keyHeld = false
 let onPlatform = false
+let onHole = false
 let jumpCount = 0
 
 // this will be used to get a win scenario, need to just add a condition to be met to win
@@ -85,6 +104,9 @@ function animate() {
     player.update()
     platforms.forEach(platform => {
        platform.draw()
+    })
+    holes.forEach(hole => {
+        hole.draw()
     })
 
     if (keys.up.pressed && !keyHeld && jumpCount < 2) {
@@ -108,6 +130,9 @@ function animate() {
             platforms.forEach(platform => {
                 platform.position.x -= 5
             })
+            holes.forEach(hole => {
+                hole.position.x -= 5
+            })
         }
 
         if (keys.left.pressed){
@@ -115,9 +140,12 @@ function animate() {
             platforms.forEach(platform => {
                 platform.position.x += 5
             })
+            holes.forEach(hole => {
+                hole.position.x += 5
+            })
         }
     }
-    
+
 // Rectangular collision detection
 platforms.forEach(platform => {
        
@@ -133,8 +161,21 @@ platforms.forEach(platform => {
     }
 
 })
-}
 
+holes.forEach(hole => {
+
+    if (player.position.y + player.height >= hole.position.y 
+        && player.position.y + player.height + player.velocity.y >= hole.position.y
+        && player.position.x + player.width >= hole.position.x
+        && player.position.x <= hole.position.x + hole.width){
+        player.velocity.y = 0
+        onHole = true
+    } else {
+        onHole = false
+    }
+})
+
+}
 animate()
 
 addEventListener('keydown', ( {keyCode} ) => {
